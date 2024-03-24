@@ -1,8 +1,11 @@
 package SENAC.API.produto;
-
+import SENAC.API.exception.ProdutoNotFoundException;
 import SENAC.API.fabricante.Fabricante;
 import SENAC.API.fabricante.FabricanteRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,5 +34,34 @@ public class ProdutoService {
 
         // Salva o novo produto no banco de dados
         return produtoRepository.save(novoProduto);
+    }
+
+    public Page<Produto> listarProdutos(Pageable pageable) {
+        return produtoRepository.findAll(pageable);
+    }
+    @Transactional
+    public Produto atualizarProduto(Long id, ProdutoAtualizacaoDTO produtoDTO) {
+        // Busca o produto pelo ID
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new ProdutoNotFoundException("Produto não encontrado com o ID: " + id));
+
+        // Atualiza os campos fornecidos no DTO de atualização
+        if (produtoDTO.getDescricao() != null) {
+            produto.setDescricao(produtoDTO.getDescricao());
+        }
+        if (produtoDTO.getPreco() != null) {
+            produto.setPreco(produtoDTO.getPreco());
+        }
+
+        // Salva as alterações e retorna o produto atualizado
+        return produtoRepository.save(produto);
+    }
+    public void deletarProduto(Long id) {
+        // Verifica se o produto existe no banco de dados
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new ProdutoNotFoundException("Produto não encontrado com o ID: " + id));
+
+        // Exclui o produto do banco de dados
+        produtoRepository.delete(produto);
     }
 }
