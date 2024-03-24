@@ -1,11 +1,12 @@
 package SENAC.API.produto;
 
-import SENAC.API.fabricante.Fabricante;
+import SENAC.API.fabricante.DadosFabricante;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class DadosCadastroProduto {
+public class ProdutoCadastroDTO {
 
     @NotBlank
     private String nome;
@@ -13,9 +14,9 @@ public class DadosCadastroProduto {
     @NotBlank
     private String descricao;
 
-    @NotBlank
+    @NotNull
     private Double preco;
 
-    @NotBlank
-    private Fabricante fabricante;
+    @NotNull
+    private DadosFabricante fabricante;
 }

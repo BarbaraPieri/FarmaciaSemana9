@@ -14,11 +14,20 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+public class Fabricante {
 
-    public class Fabricante{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nome;
+
+    public Fabricante(String nome) {
+    }
+
+    // Trecho adicionado
+    public static Fabricante criarOuObterFabricante(String nome, FabricanteRepository fabricanteRepository) {
+        return fabricanteRepository.findByNome(nome)
+                .orElseGet(() -> fabricanteRepository.save(new Fabricante(nome)));
+    }
 }

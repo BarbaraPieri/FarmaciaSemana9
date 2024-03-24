@@ -1,26 +1,24 @@
 package SENAC.API.produto;
 
 import SENAC.API.fabricante.Fabricante;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name = "Produto")
+import java.util.Objects;
+
+@Entity
+@Table(name = "produto")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Produto {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,10 +30,15 @@ public class Produto {
     @ManyToOne
     private Fabricante fabricante;
 
-    public Produto(DadosCadastroProduto dados) {
-        this.nome = dados.nome();
-        this.descricao = dados.descricao();
-        this.preco = dados.preco();
-        this.fabricante = dados.fabricante();
+    public static Produto createFromDTO(ProdutoCadastroDTO produtoDTO, Fabricante fabricante) {
+        Objects.requireNonNull(produtoDTO, "O DTO de produto não pode ser nulo");
+
+        Produto produto = new Produto();
+        produto.setNome(produtoDTO.getNome());
+        produto.setDescricao(produtoDTO.getDescricao());
+        produto.setPreco(produtoDTO.getPreco());
+        produto.setFabricante(fabricante);
+
+        return produto;
     }
 }

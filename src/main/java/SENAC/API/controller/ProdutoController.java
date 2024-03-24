@@ -1,26 +1,27 @@
 package SENAC.API.controller;
 
-import SENAC.API.produto.DadosCadastroProduto;
 import SENAC.API.produto.Produto;
-import SENAC.API.produto.ProdutoRepository;
-import jakarta.transaction.Transactional;
+import SENAC.API.produto.ProdutoCadastroDTO;
+import SENAC.API.produto.ProdutoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("produtos")
+@RequestMapping("/produtos")
 public class ProdutoController {
+
+    private final ProdutoService produtoService;
+
     @Autowired
-    private ProdutoRepository repository;
+    public ProdutoController(ProdutoService produtoService) {
+        this.produtoService = produtoService;
+    }
 
     @PostMapping
-    @Transactional
-    public  void cadastrar(@RequestBody  @Valid DadosCadastroProduto dados){
-
-        repository.save(new Produto(dados));
+    @ResponseStatus(HttpStatus.CREATED)
+    public Produto cadastrarProduto(@Valid @RequestBody ProdutoCadastroDTO produtoDTO) {
+        return produtoService.cadastrarProduto(produtoDTO);
     }
 }
