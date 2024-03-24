@@ -1,15 +1,13 @@
 package SENAC.API.fabricante;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@Table(name = "fabricantes")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,6 +21,7 @@ public class Fabricante {
     private String nome;
 
     public Fabricante(String nome) {
+        this.nome = nome;
     }
 
     // Trecho adicionado

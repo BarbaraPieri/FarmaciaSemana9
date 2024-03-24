@@ -41,6 +41,11 @@ public class ProdutoService {
     }
     @Transactional
     public Produto atualizarProduto(Long id, ProdutoAtualizacaoDTO produtoDTO) {
+        // Validação de parâmetros
+        if (id == null || produtoDTO == null) {
+            throw new IllegalArgumentException("ID do produto e DTO de atualização são obrigatórios.");
+        }
+
         // Busca o produto pelo ID
         Produto produto = produtoRepository.findById(id)
                 .orElseThrow(() -> new ProdutoNotFoundException("Produto não encontrado com o ID: " + id));

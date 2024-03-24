@@ -11,7 +11,7 @@ import lombok.Setter;
 import java.util.Objects;
 
 @Entity
-@Table(name = "produto")
+@Table(name = "produtos")
 @Getter
 @Setter
 @NoArgsConstructor
