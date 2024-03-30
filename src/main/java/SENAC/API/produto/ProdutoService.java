@@ -1,5 +1,6 @@
 package SENAC.API.produto;
 import SENAC.API.exception.ProdutoNotFoundException;
+import SENAC.API.fabricante.DadosFabricante;
 import SENAC.API.fabricante.Fabricante;
 import SENAC.API.fabricante.FabricanteRepository;
 import jakarta.transaction.Transactional;
@@ -23,9 +24,14 @@ public class ProdutoService {
     public Produto cadastrarProduto(ProdutoCadastroDTO produtoDTO) {
         // Verifica se o fabricante já existe no banco de dados
         Fabricante fabricante = fabricanteRepository.findByNome(produtoDTO.getFabricante().getNome())
-                .orElseGet(() -> fabricanteRepository.save(new Fabricante(produtoDTO.getFabricante().getNome())));
+                .orElseGet(() -> {
+                    // Se o fabricante não existir, inclui o fabricante novo
+                    DadosFabricante dadosFabricante = produtoDTO.getFabricante();
+                    Fabricante novoFabricante = new Fabricante(dadosFabricante.getNome());
+                    return fabricanteRepository.save(novoFabricante);
+                });
 
-        // Cria um novo produto com os dados do DTO e o fabricante obtido/acrescentado
+        // Novo produto com os dados do DTO e o fabricante obtido/acrescentado
         Produto novoProduto = new Produto();
         novoProduto.setNome(produtoDTO.getNome());
         novoProduto.setDescricao(produtoDTO.getDescricao());
@@ -41,10 +47,6 @@ public class ProdutoService {
     }
     @Transactional
     public Produto atualizarProduto(Long id, ProdutoAtualizacaoDTO produtoDTO) {
-        // Validação de parâmetros
-        if (id == null || produtoDTO == null) {
-            throw new IllegalArgumentException("ID do produto e DTO de atualização são obrigatórios.");
-        }
 
         // Busca o produto pelo ID
         Produto produto = produtoRepository.findById(id)

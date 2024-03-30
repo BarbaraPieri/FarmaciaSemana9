@@ -1,4 +1,5 @@
 package SENAC.API.controller;
+import SENAC.API.exception.ProdutoNotFoundException;
 import SENAC.API.produto.Produto;
 import SENAC.API.produto.ProdutoAtualizacaoDTO;
 import SENAC.API.produto.ProdutoCadastroDTO;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/produtos")
@@ -44,6 +46,11 @@ public class ProdutoController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletarProduto(@PathVariable Long id) {
-        produtoService.deletarProduto(id);
+        try {
+            produtoService.deletarProduto(id);
+        } catch (ProdutoNotFoundException ex) {
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        }
     }
 }

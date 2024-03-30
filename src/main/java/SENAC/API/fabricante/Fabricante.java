@@ -24,7 +24,6 @@ public class Fabricante {
         this.nome = nome;
     }
 
-    // Trecho adicionado
     public static Fabricante criarOuObterFabricante(String nome, FabricanteRepository fabricanteRepository) {
         return fabricanteRepository.findByNome(nome)
                 .orElseGet(() -> fabricanteRepository.save(new Fabricante(nome)));
