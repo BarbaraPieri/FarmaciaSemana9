@@ -1,5 +1,0 @@
-FROM mysql:latest
-
-ENV MYSQL_ROOT_PASSWORD=9_NhBgXr14@2
-
-ENV MYSQL_DATABASE=senac_api
